@@ -6,6 +6,10 @@ import { CarModule } from './car/car.module'
 import { AuthModule } from './auth/auth.module'
 import { DatabaseModule } from './database/database.module'
 import { TypeOrmModule } from '@nestjs/typeorm'
+import { User } from './user/user.entity'
+import { Car } from './car/car.entity'
+import { Payment } from './payment/payment.entity'
+import { Sale } from './sale/sale.entity'
 
 @Module({
   imports: [
@@ -16,7 +20,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
       username: 'antonio2',
       password: 'password',
       database: 'antonio_sells_cars',
-      entities: [],
+      entities: [User, Car, Payment, Sale],
       synchronize: true,
     }),
     UserModule,
