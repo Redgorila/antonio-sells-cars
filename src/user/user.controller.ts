@@ -8,31 +8,33 @@ import {
   Post,
 } from '@nestjs/common'
 import { User } from './user.entity'
+import { UserService } from './user.service'
 
 @Controller('users')
 export class UserController {
+  constructor(private readonly UserService: UserService) {}
   @Get()
-  getAllUser() {
-    return 'Get all users'
+  getAllUser(): Promise<User[]> {
+    return this.UserService.findAll()
   }
 
   @Get(':id')
-  getOneUser() {
-    return 'Get one user'
+  getOneUser(@Param('id') id: number) {
+    return this.UserService.findOneById(+id)
   }
 
   @Post()
-  createUser(@Body() userDto) {
-    return 'Create one user'
+  createUser(@Body() userDto: Omit<User, 'id'>) {
+    return this.UserService.createOne(userDto)
   }
 
   @Patch(':id')
-  modifyUser(@Body() userData: Partial<User>, @Param('id') id: number) {
-    return 'Modify one user'
+  modifyUser(@Body() userDto: Partial<User>, @Param('id') id: number) {
+    return this.UserService.updateOne(userDto, +id)
   }
 
   @Delete(':id')
   deleteUser(@Param('id') id: number) {
-    return 'Delete one user'
+    return this.UserService.deleteOne(+id)
   }
 }

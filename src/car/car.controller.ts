@@ -8,31 +8,33 @@ import {
   Post,
 } from '@nestjs/common'
 import { Car } from './car.entity'
+import { CarService } from './car.service'
 
 @Controller('cars')
 export class CarController {
+  constructor(private readonly carService: CarService) {}
   @Get()
   getAllCar() {
-    return 'Get all cars'
+    return this.carService.findAll()
   }
 
   @Get(':id')
-  getOneCar() {
-    return 'Get one car'
+  getOneCar(@Param('id') id: number) {
+    return this.carService.findOneById(+id)
   }
 
   @Post()
-  createCar(@Body() carDto) {
-    return 'Create one car'
+  createCar(@Body() carDto: Omit<Car, 'id'>) {
+    return this.carService.createOne(carDto)
   }
 
   @Patch(':id')
-  modifyCar(@Body() carData: Partial<Car>, @Param('id') id: number) {
-    return 'Modify one car'
+  modifyCar(@Body() carDto: Partial<Car>, @Param('id') id: number) {
+    return this.carService.updateOne(carDto, +id)
   }
 
   @Delete(':id')
   deleteCar(@Param('id') id: number) {
-    return 'Delete one car'
+    return this.carService.deleteOne(+id)
   }
 }

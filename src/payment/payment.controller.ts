@@ -1,3 +1,4 @@
+import { PaymentService } from './payment.service'
 import {
   Body,
   Controller,
@@ -11,19 +12,20 @@ import { Payment } from './payment.entity'
 
 @Controller('payments')
 export class PaymentController {
+  constructor(private readonly paymentService: PaymentService) {}
   @Get()
   getAllPayment() {
-    return 'Get all payments'
+    return this.paymentService.findAll()
   }
 
   @Get(':id')
-  getOnePayment() {
-    return 'Get one payment'
+  getOnePayment(@Param('id') id: number) {
+    return this.paymentService.findOneById(+id)
   }
 
   @Post()
-  createPayment(@Body() paymentDto) {
-    return 'Create one payment'
+  createPayment(@Body() paymentDto: Payment) {
+    return this.paymentService.createOne(paymentDto)
   }
 
   @Patch(':id')
@@ -31,11 +33,11 @@ export class PaymentController {
     @Body() paymentData: Partial<Payment>,
     @Param('id') id: number,
   ) {
-    return 'Modify one payment'
+    return this.paymentService.updateOne(paymentData, +id)
   }
 
   @Delete(':id')
   deletePayment(@Param('id') id: number) {
-    return 'Delete one payment'
+    return this.paymentService.deleteOne(+id)
   }
 }

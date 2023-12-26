@@ -8,31 +8,33 @@ import {
   Post,
 } from '@nestjs/common'
 import { Sale } from './sale.entity'
+import { SaleService } from './sale.service'
 
 @Controller('sales')
 export class SaleController {
+  constructor(private readonly SaleService: SaleService) {}
   @Get()
   getAllSale() {
-    return 'Get all sales'
+    return this.SaleService.findAll()
   }
 
   @Get(':id')
-  getOneSale() {
-    return 'Get one sale'
+  getOneSale(@Param('id') id: number) {
+    return this.SaleService.findOneById(+id)
   }
 
   @Post()
-  createSale(@Body() saleDto) {
-    return 'Create one sale'
+  createSale(@Body() saleDto: Omit<Sale, 'id'>) {
+    return this.SaleService.createOne(saleDto)
   }
 
   @Patch(':id')
-  modifySale(@Body() saleData: Partial<Sale>, @Param('id') id: number) {
-    return 'Modify one sale'
+  modifySale(@Body() saleDto: Partial<Sale>, @Param('id') id: number) {
+    return this.SaleService.updateOne(saleDto, +id)
   }
 
   @Delete(':id')
   deleteSale(@Param('id') id: number) {
-    return 'Delete one sale'
+    return this.SaleService.deleteOne(+id)
   }
 }
