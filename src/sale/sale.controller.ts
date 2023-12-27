@@ -9,6 +9,8 @@ import {
 } from '@nestjs/common'
 import { Sale } from './sale.entity'
 import { SaleService } from './sale.service'
+import { SaleDto } from './sale.dto'
+import { validate } from 'class-validator'
 
 @Controller('sales')
 export class SaleController {
@@ -24,7 +26,11 @@ export class SaleController {
   }
 
   @Post()
-  createSale(@Body() saleDto: Omit<Sale, 'id'>) {
+  async createSale(@Body() saleDto: SaleDto) {
+    const errors = await validate(saleDto)
+    if (errors.length > 0) {
+      return errors
+    }
     return this.SaleService.createOne(saleDto)
   }
 

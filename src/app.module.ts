@@ -29,7 +29,7 @@ import config from './config'
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
       entities: [User, Car, Payment, Sale],
-      synchronize: false,
+      synchronize: true,
     }),
     UserModule,
     SaleModule,

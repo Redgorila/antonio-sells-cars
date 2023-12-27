@@ -9,6 +9,8 @@ import {
   Post,
 } from '@nestjs/common'
 import { Payment } from './payment.entity'
+import { PaymentDto } from './payment.dto'
+import { validate } from 'class-validator'
 
 @Controller('payments')
 export class PaymentController {
@@ -24,7 +26,11 @@ export class PaymentController {
   }
 
   @Post()
-  createPayment(@Body() paymentDto: Payment) {
+  async createPayment(@Body() paymentDto: PaymentDto) {
+    const errors = await validate(paymentDto)
+    if (errors.length > 0) {
+      return errors
+    }
     return this.paymentService.createOne(paymentDto)
   }
 

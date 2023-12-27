@@ -9,6 +9,8 @@ import {
 } from '@nestjs/common'
 import { Car } from './car.entity'
 import { CarService } from './car.service'
+import { carDto } from './car.dto'
+import { validate } from 'class-validator'
 
 @Controller('cars')
 export class CarController {
@@ -24,7 +26,11 @@ export class CarController {
   }
 
   @Post()
-  createCar(@Body() carDto: Omit<Car, 'id'>) {
+  async createCar(@Body() carDto: carDto) {
+    const errors = await validate(carDto)
+    if (errors.length > 0) {
+      return errors
+    }
     return this.carService.createOne(carDto)
   }
 

@@ -9,6 +9,8 @@ import {
 } from '@nestjs/common'
 import { User } from './user.entity'
 import { UserService } from './user.service'
+import { UserDto } from './user.dto'
+import { validate } from 'class-validator'
 
 @Controller('users')
 export class UserController {
@@ -24,7 +26,11 @@ export class UserController {
   }
 
   @Post()
-  createUser(@Body() userDto: Omit<User, 'id'>) {
+  async createUser(@Body() userDto: UserDto) {
+    const errors = await validate(userDto)
+    if (errors.length > 0) {
+      return errors
+    }
     return this.UserService.createOne(userDto)
   }
 

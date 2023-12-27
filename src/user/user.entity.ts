@@ -14,6 +14,10 @@ export class User {
   @IsString()
   password: string
 
-  @Column({ nullable: false, type: 'date' })
+  @Column({
+    nullable: false,
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
   createdAt: Date
 }

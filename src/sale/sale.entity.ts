@@ -19,7 +19,7 @@ export class Sale {
   @IsNumber()
   buyer_id: number
 
-  @Column({ nullable: false, type: 'tinyint' })
+  @Column({ nullable: false, type: 'tinyint', default: '0' }) //Will only be updated once all collected payments fulfill the total
   @IsBoolean()
   is_paid: boolean
 
