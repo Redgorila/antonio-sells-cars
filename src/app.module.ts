@@ -10,18 +10,26 @@ import { User } from './user/user.entity'
 import { Car } from './car/car.entity'
 import { Payment } from './payment/payment.entity'
 import { Sale } from './sale/sale.entity'
+import { ConfigModule } from '@nestjs/config'
+import config from './config'
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      load: [config],
+      isGlobal: true,
+      envFilePath:
+        process.env.NODE_ENV === 'production' ? '.env.production' : '.env',
+    }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'antonio2',
-      password: 'password',
-      database: 'antonio_sells_cars',
+      host: process.env.DATABASE_HOST,
+      port: parseInt(process.env.DATABASE_PORT) || 3306,
+      username: process.env.DATABASE_USERNAME,
+      password: process.env.DATABASE_PASSWORD,
+      database: process.env.DATABASE_NAME,
       entities: [User, Car, Payment, Sale],
-      synchronize: true,
+      synchronize: false,
     }),
     UserModule,
     SaleModule,
