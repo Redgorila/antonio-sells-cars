@@ -19,6 +19,6 @@ export default () => {
         database_name: process.env.DATABASE_NAME,
         db_port: parseInt(process.env.DATABASE_PORT, 10) || 3306,
       }
-  console.log(configuration)
+
   return configuration
 }
