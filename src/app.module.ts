@@ -12,9 +12,20 @@ import { Payment } from './payment/payment.entity'
 import { Sale } from './sale/sale.entity'
 import { ConfigModule } from '@nestjs/config'
 import config from './config'
+import { LoggerModule } from 'nestjs-pino'
+import { JwtModule } from '@nestjs/jwt'
+import { jwtConstants } from './utils/constants'
 
 @Module({
   imports: [
+    LoggerModule.forRoot({
+      pinoHttp: {
+        transport: {
+          target: 'pino-pretty',
+        },
+        redact: ['req', 'res'],
+      },
+    }),
     ConfigModule.forRoot({
       load: [config],
       isGlobal: true,
@@ -31,11 +42,11 @@ import config from './config'
       entities: [User, Car, Payment, Sale],
       synchronize: true,
     }),
+    AuthModule,
     UserModule,
     SaleModule,
     PaymentModule,
     CarModule,
-    AuthModule,
     DatabaseModule,
   ],
   controllers: [],
