@@ -1,5 +1,5 @@
-import { Logger } from '@nestjs/common'
-import { DeepPartial, DeleteResult, Repository } from 'typeorm'
+import { HttpException, HttpStatus, Logger } from '@nestjs/common'
+import { DeepPartial, DeleteResult, FindManyOptions, Repository } from 'typeorm'
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity'
 
 export abstract class GenericService<T> {
@@ -9,6 +9,11 @@ export abstract class GenericService<T> {
   async findAll(): Promise<T[]> {
     this.logger.log(`GenericService: will fetch all items`)
     return this.getRepository().find()
+  }
+
+  async findManyByOptions(findOptions: FindManyOptions): Promise<T[]> {
+    this.logger.log('GenericService: will find items based on query')
+    return this.getRepository().find(findOptions)
   }
 
   async findOneById(id: number): Promise<T> {
@@ -23,7 +28,11 @@ export abstract class GenericService<T> {
 
   async createOne(params: DeepPartial<T>): Promise<T> {
     this.logger.log(`GenericService: will create new item`)
-    return this.getRepository().save(params)
+    try {
+      return this.getRepository().save(params)
+    } catch (error) {
+      throw new HttpException('Invalid format of data', HttpStatus.BAD_REQUEST)
+    }
   }
 
   async updateOne(params: DeepPartial<T>, id: any): Promise<T> {
