@@ -7,11 +7,11 @@ export class Payment {
   @PrimaryGeneratedColumn()
   id: number
 
-  @ManyToOne(() => Sale, (sale) => sale.payment)
+  @Column({ nullable: false, type: 'int' })
   @IsNumber()
-  sale_: Sale
+  sale_id: number
 
-  @Column()
+  @Column({ nullable: false, type: 'int' })
   @IsNumber()
   value: number
 }

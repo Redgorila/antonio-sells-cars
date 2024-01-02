@@ -23,6 +23,7 @@ export class Sale {
   @IsBoolean()
   is_paid: boolean
 
-  @OneToMany(() => Payment, (payment) => payment.sale_)
-  payment: Payment[]
+  @Column({ nullable: false, type: 'int' })
+  @IsNumber()
+  total: number
 }
